@@ -3,16 +3,16 @@ using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
 {
+    public static List<GameObject> _mapTiles = new List<GameObject>();
+    public static List<GameObject> _pathTiles = new List<GameObject>();
+    public static GameObject startTile;
+    public static GameObject endTile;
     public GameObject MapTile;
     public Color PathColor;
     public Color StartColor;
     public Color EndColor;
     [SerializeField] private int _mapWidth;
     [SerializeField] private int _mapHeight;
-    private List<GameObject> _mapTiles = new List<GameObject>();
-    private List<GameObject> _pathTiles = new List<GameObject>();
-    private bool _reachedX = false;
-    private bool _reachedY = false;
     private GameObject _currentTile;
     private int _currentIndex;
     private int _nextIndex;
@@ -75,14 +75,15 @@ public class MapGenerator : MonoBehaviour
         List<GameObject> bottomEdgeTiles = GetBottomEdgeTile();
         int rand1 = Random.Range(0, _mapWidth);
         int rand2 = Random.Range(0, _mapWidth);
-        GameObject startTile = topEdgeTiles[rand1];
-        GameObject endTile = bottomEdgeTiles[rand2];
+        startTile = topEdgeTiles[rand1];
+        endTile = bottomEdgeTiles[rand2];
 
         _currentTile = startTile;
-        MoveDown();
+        _pathTiles.Add(_currentTile);
 
         int loopCount = 0;
-        while (!_reachedX)
+
+        while (_currentTile != endTile)
         {
             loopCount++;
             if (loopCount > 100)
@@ -91,33 +92,30 @@ public class MapGenerator : MonoBehaviour
                 break;
             }
 
-            if (_currentTile.transform.position.x > endTile.transform.position.x)
+            if (Random.value > 0.5f)
             {
-                MoveLeft();
-            }
-            else if (_currentTile.transform.position.x < endTile.transform.position.x)
-            {
-                MoveRight();
-            }
-            else
-            {
-                _reachedX = true;
-            }
-        }
-
-        while (!_reachedY)
-        {
-            if (_currentTile.transform.position.y > endTile.transform.position.y)
-            {
-                MoveDown();
+                if (_currentTile.transform.position.x > endTile.transform.position.x)
+                {
+                    MoveLeft();
+                }
+                else if (_currentTile.transform.position.x < endTile.transform.position.x)
+                {
+                    MoveRight();
+                }
             }
             else
             {
-                _reachedY = true;
+                if (_currentTile.transform.position.y > endTile.transform.position.y)
+                {
+                    MoveDown();
+                }
+            }
+
+            if (!_pathTiles.Contains(_currentTile))
+            {
+                _pathTiles.Add(_currentTile);
             }
         }
-
-        _pathTiles.Add(endTile);
 
         foreach (GameObject obj in _pathTiles)
         {

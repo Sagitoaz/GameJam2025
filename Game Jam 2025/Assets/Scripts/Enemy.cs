@@ -4,7 +4,7 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private float _enemyHealth;
     [SerializeField] private float _speed;
-    private int _killReward;
+    [SerializeField] private int _killReward;
     private int _damage;
     private GameObject _targetTile;
     void Awake()
@@ -27,6 +27,10 @@ public class Enemy : MonoBehaviour
     private void CalculateMovement()
     {
         transform.position = Vector3.MoveTowards(transform.position, _targetTile.transform.position, _speed * Time.deltaTime);
+        if (transform.position == MapGenerator.endTile.transform.position)
+        {
+            die();
+        }
     }
     private void CheckPosition()
     {

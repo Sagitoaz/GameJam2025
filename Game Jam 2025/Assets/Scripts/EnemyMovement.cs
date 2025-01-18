@@ -6,12 +6,19 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private float moveSpeed = 2f;
     [SerializeField] private float HeathPoint;
+    [SerializeField] private float MaxHealth;
     [SerializeField] private int killReward;
+    [SerializeField] HealthBar healthBar;
     private Transform target;
     private int pathIndex = 0;
+    void Awake()
+    {
+        healthBar = GetComponentInChildren<HealthBar>();
+    }
     void Start()
     {
         target = LevelManager.main.path[0];
+        healthBar.UpdateHealthBar(HeathPoint, MaxHealth);
     }
     void Update()
     {
@@ -29,6 +36,19 @@ public class EnemyMovement : MonoBehaviour
                 target = LevelManager.main.path[pathIndex];
             }
         }
+    }
+    public void Damage(float dmg)
+    {
+        HeathPoint -= dmg;
+        healthBar.UpdateHealthBar(HeathPoint, MaxHealth);
+        if (HeathPoint <= 0)
+        {
+            Die();
+        }
+    }
+    private void Die()
+    {
+        Destroy(gameObject);
     }
     void FixedUpdate()
     {

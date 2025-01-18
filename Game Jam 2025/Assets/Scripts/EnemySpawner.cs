@@ -55,12 +55,13 @@ public class EnemySpawner : MonoBehaviour
         isSpawning = false;
         timeSinceLastSpawn = 0f;
         currentWave++;
-        if (currentWave > 3) return;
+        baseEnemy = EnemyPerWave();
+
         StartCoroutine(StartWave());
     }
     private void SpawnEnemy()
     {
-        int typeOfEnemy = Random.Range(0, currentWave);
+        int typeOfEnemy = Random.Range(0, Mathf.Min(3, currentWave));
         GameObject prefabToSpawn = enemyPrefabs[typeOfEnemy];
         Instantiate(prefabToSpawn, LevelManager.main.startPoint.position, Quaternion.identity);
     }

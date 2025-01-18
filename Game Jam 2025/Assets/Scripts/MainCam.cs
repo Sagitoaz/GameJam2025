@@ -5,7 +5,7 @@ public class MainCam : MonoBehaviour
     [SerializeField] private float _speed = 3.0f;
     void Start()
     {
-        
+        transform.position = new Vector3(-10, 0, -10);
     }
     void Update()
     {

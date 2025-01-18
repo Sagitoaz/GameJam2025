@@ -66,7 +66,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\MapGenerator.cs" />
+    <Compile Include="Assets\Scripts\EnemyContainer.cs" />
     <Compile Include="Assets\Scripts\Enemy.cs" />
+    <Compile Include="Assets\Scripts\BarrelRotation.cs" />
+    <Compile Include="Assets\Scripts\BasicTower.cs" />
+    <Compile Include="Assets\Scripts\MainCamera.cs" />
+    <Compile Include="Assets\Scripts\Tower.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

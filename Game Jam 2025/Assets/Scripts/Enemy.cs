@@ -2,18 +2,23 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    private float _enemyHealth;
-    private float _speed;
+    [SerializeField] private float _enemyHealth;
+    [SerializeField] private float _speed;
     private int _killReward;
     private int _damage;
     private GameObject _targetTile;
+    void Awake()
+    {
+        EnemyContainer.enemies.Add(gameObject);
+    }
     void Start()
     {
-        
+        SpawnEnemy();
     }
     void Update()
     {
-        
+        CheckPosition();
+        CalculateMovement();
     }
     private void SpawnEnemy()
     {
@@ -28,6 +33,24 @@ public class Enemy : MonoBehaviour
         if (_targetTile != null && _targetTile != MapGenerator.endTile)
         {
             float distance = (transform.position - _targetTile.transform.position).magnitude;
+            if (distance < 0.001f)
+            {
+                int currentIndex = MapGenerator._pathTiles.IndexOf(_targetTile) + 1;
+                _targetTile = MapGenerator._pathTiles[currentIndex + 1];
+            }
         }
+    }
+    public void TakeDmg(float amount)
+    {
+        _enemyHealth -= amount;
+        if (_enemyHealth <= 0)
+        {
+            die();
+        }
+    }
+    private void die()
+    {
+        EnemyContainer.enemies.Remove(gameObject);
+        Destroy(transform.gameObject);
     }
 }
